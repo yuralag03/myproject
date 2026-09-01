@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#181014">
+<title>Открытка ❤️ Для тебя</title>
+
+<!--
+  ❤️  ОТКРЫТКА-ПОЗДРАВЛЕНИЕ  ·  тёмная нежная тема · стиль iOS 26 / Liquid Glass
+
+  📸  ФОТО — КАК ДОБАВИТЬ СВОИ:
+      1. Положи файлы в ту же папку репозитория, где лежит этот index.html.
+      2. Назови их:   photo1.jpg    photo2.jpg    photo3.jpg
+         (хочешь другие имена или больше фото — просто допиши строки
+          в объекте CONFIG → «photos» в <script> внизу файла).
+      3. Пока твоих файлов нет — автоматически показываются заглушки.
+      Фото разбросаны по всему сайту, подпись — рядом с каждым фото
+      (поле «caption» у каждого фото в CONFIG).
+
+  ✍️  ТЕКСТ ПОЗДРАВЛЕНИЯ — КУДА ВСТАВЛЯТЬ:
+      Всё в одном месте — объект CONFIG внизу файла:
+        • title     — большой заголовок открытки
+        • subtitle  — строка под заголовком
+        • messages  — пузыри с поздравлением в рамочках (строк сколько
+                      угодно, они автоматически распределяются между фото)
+        • signature — твоя подпись в конце
+
+  🚀  GitHub: закинь index.html + фото в корень репозитория →
+      Settings → Pages → Branch: main → открытка онлайн.
+-->
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5/400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5/600.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/unbounded@5/700.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/unbounded@5/900.css">
+
+<style>
+  :root{
+    --bg-1:#241519;
+    --bg-2:#181014;
+    --red:#c97b8b;      /* мягкое розовое дерево */
+    --red-deep:#8a4f5e; /* приглушённый пыльный бордо */
+    --rose:#f0b6c1;     /* пудрово-розовый */
+    --blush:#ffe9ec;    /* кремово-розовый */
+    --ink:#fdf3f4;
+    --muted:#cfa9b2;
+    --glass:rgba(255,235,238,.06);
+    --glass-brd:rgba(255,235,238,.14);
+    --spring:cubic-bezier(.34,1.56,.64,1);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Inter',system-ui,sans-serif;color:var(--ink);
+    min-height:100vh;overflow-x:hidden;
+    background:
+      radial-gradient(1000px 620px at 88% -8%, rgba(217,137,152,.20), transparent 62%),
+      radial-gradient(900px 700px at -12% 34%, rgba(240,182,193,.10), transparent 60%),
+      radial-gradient(1100px 800px at 52% 112%, rgba(160,95,112,.32), transparent 68%),
+      linear-gradient(180deg,var(--bg-1) 0%,var(--bg-2) 62%,#1d1216 100%);
+    background-attachment:fixed;
+  }
+  ::selection{background:#b06a7c;color:#fff}
+
+  /* ── мягкое свечение фона ───────────────────────────── */
+  .glow{position:fixed;border-radius:50%;filter:blur(95px);z-index:0;pointer-events:none;animation:breathe 16s ease-in-out infinite alternate}
+  .glow.g1{width:460px;height:460px;top:-140px;right:-110px;background:rgba(214,146,161,.28)}
+  .glow.g2{width:520px;height:520px;bottom:-190px;left:-150px;background:rgba(150,84,104,.34);animation-delay:-5s}
+  .glow.g3{width:300px;height:300px;top:44%;left:60%;background:rgba(255,220,227,.09);animation-delay:-9s}
+  @keyframes breathe{
+    0%{transform:translate(0,0) scale(1);opacity:.85}
+    50%{transform:translate(40px,-30px) scale(1.14);opacity:1}
+    100%{transform:translate(-30px,24px) scale(.94);opacity:.8}
+  }
+
+  #fx{position:fixed;inset:0;z-index:60;pointer-events:none}
+
+  /* ── динамический остров ────────────────────────────── */
+  .island{
+    position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:20;
+    display:flex;align-items:center;gap:8px;padding:9px 18px;border-radius:999px;
+    background:rgba(24,14,18,.62);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+    border:1px solid var(--glass-brd);color:var(--blush);
+    font-size:12px;font-weight:600;letter-spacing:.7px;
+    box-shadow:0 12px 30px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.10);
+  }
+  .island i{width:7px;height:7px;border-radius:50%;background:var(--rose);box-shadow:0 0 10px var(--rose);animation:beat 1.4s ease-in-out infinite}
+  @keyframes beat{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.55);opacity:.55}}
+
+  /* ── интро ──────────────────────────────────────────── */
+  #intro{
+    position:fixed;inset:0;z-index:40;display:grid;place-items:center;cursor:pointer;
+    background:
+      radial-gradient(900px 640px at 50% 22%, rgba(214,146,161,.16), transparent 62%),
+      linear-gradient(180deg,#281820,#181014);
+    transition:opacity .65s ease,transform .65s ease;
+  }
+  #intro.gone{opacity:0;transform:scale(1.07);pointer-events:none}
+  .intro-box{display:flex;flex-direction:column;align-items:center;gap:22px;text-align:center;padding:0 24px}
+  .intro-heart{
+    position:relative;width:118px;height:118px;border-radius:50%;border:1px solid var(--glass-brd);
+    display:grid;place-items:center;font-size:54px;cursor:pointer;
+    background:rgba(255,235,238,.07);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+    box-shadow:0 26px 60px rgba(0,0,0,.5), 0 0 60px rgba(201,123,139,.24), inset 0 1px 0 rgba(255,255,255,.16);
+    animation:pulse 1.7s ease-in-out infinite;
+  }
+  .intro-heart::before,.intro-heart::after{
+    content:'';position:absolute;inset:0;border-radius:50%;
+    border:2px solid rgba(240,182,193,.38);animation:ring 2.2s ease-out infinite;
+  }
+  .intro-heart::after{animation-delay:1.1s}
+  @keyframes ring{from{transform:scale(1);opacity:.9}to{transform:scale(2);opacity:0}}
+  @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+  .intro-title{font-family:'Unbounded';font-weight:900;font-size:clamp(24px,7vw,36px);color:var(--blush);text-shadow:0 0 40px rgba(217,137,152,.5)}
+  .intro-sub{font-size:14px;color:var(--muted);font-weight:600;letter-spacing:.5px}
+
+  /* ── страница ───────────────────────────────────────── */
+  .page{position:relative;z-index:1;max-width:880px;margin:0 auto;padding:96px 22px 110px}
+  .hero{text-align:center;margin-bottom:26px}
+  .title{
+    font-family:'Unbounded';font-weight:900;
+    font-size:clamp(28px,8vw,48px);line-height:1.12;
+    background:linear-gradient(90deg,#ffe9ec,#f2aab6,#cf8291,#ffe9ec);
+    background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;
+    animation:shimmer 7s linear infinite;
+    filter:drop-shadow(0 6px 30px rgba(217,137,152,.35));
+  }
+  @keyframes shimmer{to{background-position:300% 0}}
+  .subtitle{color:var(--muted);font-size:15px;font-weight:600;letter-spacing:.6px;margin-top:14px}
+  .divider{display:flex;justify-content:center;gap:10px;color:rgba(240,182,193,.5);font-size:11px;margin:38px 0}
+
+  #stage{display:flex;flex-direction:column;gap:14px}
+
+  /* ── сцена: фото + подпись рядом, разбросаны по сайту ─ */
+  .scene{display:flex;align-items:center;gap:38px;margin:58px 0}
+  .scene.rev{flex-direction:row-reverse}
+  .scene:nth-of-type(even){padding-left:4%}
+  .scene:nth-of-type(odd).rev{padding-right:4%}
+
+  .ph-frame{
+    position:relative;flex:0 0 auto;width:min(400px,88vw);aspect-ratio:4/5;
+    padding:10px;border-radius:26px;overflow:hidden;
+    background:var(--glass);border:1px solid var(--glass-brd);
+    backdrop-filter:blur(18px) saturate(1.2);-webkit-backdrop-filter:blur(18px) saturate(1.2);
+    box-shadow:0 28px 64px rgba(0,0,0,.55), 0 0 50px rgba(201,123,139,.16), inset 0 1px 0 rgba(255,255,255,.16);
+    transform:rotate(var(--rot,0deg));
+    transition:transform .6s var(--spring), translate .3s ease-out;
+    will-change:transform;
+  }
+  .ph-frame::after{
+    content:'';position:absolute;inset:0;border-radius:26px;pointer-events:none;
+    background:linear-gradient(160deg,rgba(255,255,255,.13),transparent 34%);
+  }
+  .ph-frame:active{transform:rotate(0deg) scale(.97)}
+  .ph-inner{width:100%;height:100%;border-radius:18px;overflow:hidden;background:#33202a}
+  .ph-inner img{width:100%;height:100%;object-fit:cover;display:block;animation:kb 16s ease-in-out infinite alternate}
+  @keyframes kb{from{transform:scale(1)}to{transform:scale(1.12) translate(2%,-2%)}}
+
+  .big-heart{
+    position:absolute;inset:0;z-index:3;display:grid;place-items:center;font-size:84px;
+    pointer-events:none;animation:bigpop .95s var(--spring) forwards;
+    filter:drop-shadow(0 8px 26px rgba(201,123,139,.6));
+  }
+  @keyframes bigpop{
+    0%{transform:scale(0);opacity:0}
+    30%{transform:scale(1.3);opacity:1}
+    60%{transform:scale(1)}
+    100%{transform:scale(1.05) translateY(-16px);opacity:0}
+  }
+
+  /* подпись рядом с фото */
+  .cap-side{display:flex;flex-direction:column;gap:10px;max-width:250px}
+  .cap-side .num{font-family:'Unbounded';font-weight:700;font-size:11px;letter-spacing:4px;color:var(--rose)}
+  .cap-side .line{width:46px;height:1px;background:linear-gradient(90deg,var(--rose),transparent);box-shadow:0 0 8px rgba(240,182,193,.6)}
+  .cap-side .txt{font-size:15.5px;line-height:1.6;color:#f6dde2;font-style:italic}
+  .scene.rev .cap-side{align-items:flex-end;text-align:right}
+  .scene.rev .cap-side .line{background:linear-gradient(270deg,var(--rose),transparent)}
+
+  /* ── рамочка с поздравлением ────────────────────────── */
+  .letter{
+    position:relative;align-self:flex-start;width:100%;max-width:520px;
+    margin:10px 0;padding:28px 20px 18px;border-radius:24px;
+    background:var(--glass);border:1px solid var(--glass-brd);
+    backdrop-filter:blur(18px) saturate(1.2);-webkit-backdrop-filter:blur(18px) saturate(1.2);
+    box-shadow:0 24px 60px rgba(0,0,0,.45), 0 0 40px rgba(201,123,139,.13), inset 0 1px 0 rgba(255,255,255,.12);
+    display:flex;flex-direction:column;gap:10px;
+    rotate:-.8deg;
+  }
+  .letter.right{align-self:flex-end;rotate:.8deg}
+  .letter::before{
+    content:'';position:absolute;inset:7px;border-radius:17px;pointer-events:none;
+    border:1px dashed rgba(240,182,193,.38);
+  }
+  .letter-tag{
+    position:absolute;top:-13px;left:50%;transform:translateX(-50%);
+    padding:5px 14px;border-radius:999px;white-space:nowrap;
+    font-size:11px;font-weight:700;letter-spacing:1.6px;text-transform:lowercase;
+    color:var(--blush);background:#2c1a20;border:1px solid rgba(240,182,193,.45);
+    box-shadow:0 6px 18px rgba(0,0,0,.4), 0 0 20px rgba(201,123,139,.22);
+  }
+
+  /* пузыри (как в Telegram) — внутри рамочки */
+  .bubble{
+    max-width:100%;align-self:flex-end;position:relative;
+    background:linear-gradient(135deg,#d98a98,#a55d6e);color:#fff;
+    padding:13px 17px 7px;border-radius:20px 20px 6px 20px;
+    font-size:15px;line-height:1.55;border:1px solid rgba(255,255,255,.18);
+    box-shadow:0 14px 30px rgba(0,0,0,.4), 0 0 30px rgba(201,123,139,.14);
+  }
+  .bubble.in{
+    align-self:flex-start;border-radius:20px 20px 20px 6px;color:var(--ink);
+    background:rgba(255,235,238,.08);border:1px solid var(--glass-brd);
+    box-shadow:0 12px 26px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.10);
+  }
+  .bubble .meta{display:flex;justify-content:flex-end;gap:6px;font-size:11px;opacity:.75;margin-top:6px;font-weight:600}
+  .bubble .ticks{letter-spacing:-1px}
+
+  /* ── финал: кнопка и подпись ────────────────────────── */
+  .finale{display:flex;flex-direction:column;align-items:center;gap:22px;margin-top:70px}
+  .cta{
+    position:relative;overflow:hidden;border:none;cursor:pointer;
+    padding:18px 28px;border-radius:999px;
+    background:linear-gradient(135deg,#cf7f90,#8f5163);color:#fff;
+    font-family:'Unbounded';font-weight:700;font-size:14px;letter-spacing:.5px;
+    border:1px solid rgba(255,255,255,.25);
+    box-shadow:0 20px 46px rgba(0,0,0,.5), 0 0 46px rgba(201,123,139,.28);
+    transition:transform .4s var(--spring);
+  }
+  .cta:active{transform:scale(.94)}
+  .cta::after{
+    content:'';position:absolute;inset:0;
+    background:linear-gradient(105deg,transparent 32%,rgba(255,255,255,.5) 50%,transparent 68%);
+    transform:translateX(-130%);animation:shine 3.2s ease-in-out infinite;
+  }
+  @keyframes shine{0%{transform:translateX(-130%)}55%,100%{transform:translateX(130%)}}
+  .signature{text-align:center;font-size:16px;font-weight:600;color:var(--blush);font-style:italic;text-shadow:0 0 24px rgba(201,123,139,.4)}
+
+  .hint{
+    position:fixed;bottom:14px;left:50%;transform:translateX(-50%);z-index:20;
+    padding:8px 16px;border-radius:999px;font-size:12px;font-weight:600;color:var(--muted);
+    background:rgba(24,14,18,.6);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    border:1px solid var(--glass-brd);white-space:nowrap;
+  }
+
+  /* ── пружинное появление при скролле ────────────────── */
+  .rv{opacity:0;transform:translateY(40px) scale(.96)}
+  .rv.show{animation:popIn .9s var(--spring) forwards;animation-delay:var(--d,0s)}
+  @keyframes popIn{to{opacity:1;transform:none}}
+
+  /* ── мобильные: фото и подпись в столбик ────────────── */
+  @media (max-width:700px){
+    .scene,.scene.rev{flex-direction:column;gap:20px;padding:0 !important;margin:46px 0}
+    .scene.rev .cap-side{align-items:flex-start;text-align:left}
+    .scene.rev .cap-side .line{background:linear-gradient(90deg,var(--rose),transparent)}
+    .cap-side{max-width:400px}
+    .letter,.letter.right{align-self:stretch;rotate:0deg}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+    .rv{opacity:1;transform:none}
+  }
+</style>
+</head>
+<body>
+
+  <canvas id="fx"></canvas>
+  <div class="glow g1"></div><div class="glow g2"></div><div class="glow g3"></div>
+
+  <div class="island"><i></i>открытка · с любовью</div>
+
+  <!-- интро -->
+  <div id="intro">
+    <div class="intro-box">
+      <button class="intro-heart" aria-label="Открыть открытку">💌</button>
+      <div class="intro-title">Для тебя</div>
+      <div class="intro-sub">нажми, чтобы открыть</div>
+    </div>
+  </div>
+
+  <main class="page">
+    <header class="hero">
+      <h1 class="title rv" id="title" style="--d:.05s">С Днём Рождения!</h1>
+      <p class="subtitle rv" id="subtitle" style="--d:.2s">эта открытка — для тебя</p>
+    </header>
+
+    <div class="divider rv" style="--d:.3s">♥&ensp;•&ensp;♥&ensp;•&ensp;♥</div>
+
+    <!-- 📸 фото + ✍️ поздравления в рамочках собираются сюда из CONFIG -->
+    <section id="stage"></section>
+
+    <div class="divider rv">♥&ensp;•&ensp;♥&ensp;•&ensp;♥</div>
+
+    <section class="finale">
+      <button class="cta rv" id="cta">Отправить любовь ❤️</button>
+      <p class="signature rv" id="signature">С любовью, …</p>
+    </section>
+  </main>
+
+  <div class="hint rv">тыкай куда угодно — полетят ❤️ · двойной тап по фото</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   ✏️  CONFIG — ВСЁ РЕДАКТИРУЕТСЯ ЗДЕСЬ, В ОДНОМ МЕСТЕ
+   ═══════════════════════════════════════════════════════════ */
+const CONFIG = {
+  title:    'С Днём Рождения!',              // ← большой заголовок
+  subtitle: 'эта открытка — для тебя',       // ← строка под заголовком
+
+  /* 📸 ФОТО: положи файлы рядом с index.html (photo1.jpg …)
+     или впиши сюда свои имена. «caption» — подпись рядом с фото. */
+  photos: [
+    { src: 'photo1.jpg', caption: 'Вставь подпись к первому фото…' },
+    { src: 'photo2.jpg', caption: 'Вставь подпись ко второму фото…' },
+    { src: 'photo3.jpg', caption: 'Вставь подпись к третьему фото…' },
+  ],
+
+  /* ✍️ ПОЗДРАВЛЕНИЕ: каждая строка = один пузырь в рамочке.
+     Строки автоматически распределяются между фото по всему сайту. */
+  messages: [
+    'Вставь сюда первое тёплое слово…',
+    'Вставь сюда продолжение поздравления…',
+    'И здесь — самые важные слова ❤️',
+  ],
+
+  signature: 'С любовью, (подпиши здесь)',   // ← твоя подпись
+};
+
+/* заглушки, пока твоих фото нет в репозитории */
+const FALLBACK_PHOTOS = [
+  'https://image.qwenlm.ai/public_source/bdcd85d3-6515-4891-9635-ef89a9cd850e/17499651c-5571-4589-bf08-43ffb63b2fb9.png',
+  'https://image.qwenlm.ai/public_source/bdcd85d3-6515-4891-9635-ef89a9cd850e/1044f3310-f4f9-437e-9d1a-20fcebd95483.png',
+  'https://image.qwenlm.ai/public_source/bdcd85d3-6515-4891-9635-ef89a9cd850e/1069e96be-63ac-48ae-acd1-7536829147b4.png',
+];
+
+const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const rnd = (a,b) => a + Math.random()*(b-a);
+
+/* ── движок сердечек (канвас) ─────────────────────────────── */
+const FX = (() => {
+  const cvs = document.getElementById('fx'), ctx = cvs.getContext('2d');
+  let W, H;
+  const parts = [];
+  const EMO  = ['❤️','🤍','💖','💗','✨'];
+  const pick = a => a[(Math.random()*a.length)|0];
+
+  function resize(){
+    const d = Math.min(devicePixelRatio||1, 2);
+    W = innerWidth; H = innerHeight;
+    cvs.width = W*d; cvs.height = H*d;
+    cvs.style.width = W+'px'; cvs.style.height = H+'px';
+    ctx.setTransform(d,0,0,d,0,0);
+  }
+  addEventListener('resize', resize, {passive:true}); resize();
+
+  function draw(p, alpha){
+    ctx.save();
+    ctx.globalAlpha = Math.max(0, Math.min(1, alpha));
+    ctx.translate(p.x, p.y); ctx.rotate(p.rot||0);
+    ctx.font = p.s+'px serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText(p.e, 0, 0); ctx.restore();
+  }
+  function step(){
+    ctx.clearRect(0,0,W,H);
+    for(let i=parts.length-1;i>=0;i--){
+      const p = parts[i];
+      if(p.type==='burst'){
+        p.vy += p.g; p.x += p.vx; p.y += p.vy; p.vx *= .985;
+        p.rot += p.vr; p.life -= p.decay;
+        if(p.life<=0){ parts.splice(i,1); continue; }
+        draw(p, p.life);
+      } else if(p.type==='rain'){
+        p.sway += p.swaySp; p.x += Math.sin(p.sway)*p.swayAmp; p.y += p.vy;
+        if(p.y > H+50){ parts.splice(i,1); continue; }
+        draw(p, .95);
+      } else {
+        p.sway += p.swaySp; p.x += Math.sin(p.sway)*p.swayAmp; p.y += p.vy;
+        if(p.y < -50){ parts.splice(i,1); continue; }
+        draw(p, p.a);
+      }
+    }
+    if(parts.length > 260) parts.splice(0, parts.length-260);
+    requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+
+  if(!REDUCED) setInterval(() => {
+    if(document.hidden) return;
+    if(parts.filter(p=>p.type==='float').length < 12)
+      parts.push({type:'float', x:rnd(0,W), y:H+30, vy:-rnd(.35,.9),
+        sway:rnd(0,6.28), swaySp:rnd(.01,.03), swayAmp:rnd(.3,1),
+        s:rnd(11,20), e:pick(EMO), a:rnd(.22,.5), rot:rnd(-.25,.25)});
+  }, 1500);
+
+  return {
+    burst(x, y, o={}){
+      if(REDUCED) return;
+      const count=o.count||12, power=o.power||6, up=o.up??-2;
+      const s0=(o.size||[14,30])[0], s1=(o.size||[14,30])[1];
+      for(let i=0;i<count;i++){
+        const ang=rnd(0,Math.PI*2), sp=rnd(1,power);
+        parts.push({type:'burst',x,y,vx:Math.cos(ang)*sp,vy:Math.sin(ang)*sp+up,
+          g:rnd(.06,.16),rot:rnd(0,6.28),vr:rnd(-.15,.15),s:rnd(s0,s1),
+          e:pick(o.emojis||EMO),life:1,decay:rnd(.012,.022)});
+      }
+    },
+    rain(count=20){
+      if(REDUCED) return;
+      for(let i=0;i<count;i++)
+        parts.push({type:'rain',x:rnd(0,W),y:rnd(-90,-10),vy:rnd(1.6,3.6),
+          sway:rnd(0,6.28),swaySp:rnd(.02,.06),swayAmp:rnd(.4,1.4),
+          s:rnd(16,30),e:pick(EMO),rot:rnd(-.3,.3)});
+    }
+  };
+})();
+
+const vibrate = ms => { try{ navigator.vibrate && navigator.vibrate(ms); }catch(e){} };
+
+/* ── сборка страницы из CONFIG ────────────────────────────── */
+document.getElementById('title').textContent     = CONFIG.title;
+document.getElementById('subtitle').textContent  = CONFIG.subtitle;
+document.getElementById('signature').textContent = CONFIG.signature;
+
+const stage = document.getElementById('stage');
+const ROTS = [-4, 3, -2.5, 4, -3, 2.5];
+const DEPTHS = [1, 1.6, 1.2, 1.9, 1.4, 1.1];
+
+const nPhotos = Math.max(1, CONFIG.photos.length);
+const per = Math.max(1, Math.ceil(CONFIG.messages.length / nPhotos));
+const chunks = [];
+for(let i=0;i<CONFIG.messages.length;i+=per) chunks.push(CONFIG.messages.slice(i,i+per));
+
+let bubbleIdx = 0;
+function makeBubble(text){
+  const b = document.createElement('div');
+  b.className = 'bubble rv' + (bubbleIdx===0 ? ' in' : '');
+  b.style.setProperty('--d', .15+'s');
+  b.append(document.createTextNode(text));
+  const meta = document.createElement('div');
+  meta.className='meta';
+  meta.innerHTML='<span>сейчас</span><span class="ticks">✓✓</span>';
+  b.append(meta);
+  bubbleIdx++;
+  return b;
+}
+
+/* рамочка для блока поздравлений */
+function makeLetter(chunk, idx){
+  const letter = document.createElement('div');
+  letter.className = 'letter rv' + (idx%2 ? ' right' : '');
+  letter.style.setProperty('--d', '.1s');
+  const tag = document.createElement('span');
+  tag.className = 'letter-tag';
+  tag.textContent = 'моё поздравление';
+  letter.append(tag);
+  chunk.forEach(m => letter.append(makeBubble(m)));
+  return letter;
+}
+
+CONFIG.photos.forEach((p,i) => {
+  const scene = document.createElement('figure');
+  scene.className = 'scene rv' + (i%2 ? ' rev' : '');
+  scene.style.setProperty('--d', '0s');
+
+  const frame = document.createElement('div');
+  frame.className = 'ph-frame';
+  frame.style.setProperty('--rot', ROTS[i%ROTS.length]+'deg');
+  frame.dataset.depth = DEPTHS[i%DEPTHS.length];
+
+  const inner = document.createElement('div');
+  inner.className = 'ph-inner';
+  const img = document.createElement('img');
+  img.alt = p.caption || 'фото';
+  img.loading = 'lazy';
+  img.src = p.src;
+  img.onerror = () => { img.onerror=null; img.src=FALLBACK_PHOTOS[i%FALLBACK_PHOTOS.length]; };
+  inner.append(img);
+  frame.append(inner);
+
+  const cap = document.createElement('figcaption');
+  cap.className = 'cap-side';
+  cap.innerHTML = `<span class="num">№ 0${i+1}</span><span class="line"></span>`;
+  const txt = document.createElement('span');
+  txt.className='txt'; txt.textContent = p.caption;
+  cap.append(txt);
+
+  scene.append(frame, cap);
+  stage.append(scene);
+
+  if(chunks[i] && chunks[i].length) stage.append(makeLetter(chunks[i], i));
+});
+/* если сообщений больше, чем фото — добавим остаток в конец */
+for(let i=CONFIG.photos.length;i<chunks.length;i++)
+  if(chunks[i].length) stage.append(makeLetter(chunks[i], i));
+
+/* ── интро ────────────────────────────────────────────────── */
+const intro = document.getElementById('intro');
+let revealed = false;
+function startReveal(){
+  if(revealed) return; revealed = true;
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(en => {
+      if(en.isIntersecting){ en.target.classList.add('show'); io.unobserve(en.target); }
+    });
+  }, {threshold:.16});
+  document.querySelectorAll('.rv').forEach(el => io.observe(el));
+}
+intro.addEventListener('click', e => {
+  FX.burst(e.clientX||innerWidth/2, e.clientY||innerHeight/2, {count:28,power:8,size:[16,36]});
+  vibrate(15);
+  intro.classList.add('gone');
+  setTimeout(() => intro.remove(), 700);
+  startReveal();
+});
+
+/* ── параллакс фото за курсором (десктоп) ─────────────────── */
+let pX=0, pY=0;
+addEventListener('pointermove', e => {
+  pX = e.clientX/innerWidth - .5;
+  pY = e.clientY/innerHeight - .5;
+}, {passive:true});
+if(!REDUCED && matchMedia('(pointer:fine)').matches){
+  (function para(){
+    document.querySelectorAll('.ph-frame').forEach(f => {
+      const d = +f.dataset.depth || 1;
+      f.style.translate = `${(-pX*d*16).toFixed(1)}px ${(-pY*d*12).toFixed(1)}px`;
+    });
+    requestAnimationFrame(para);
+  })();
+}
+
+/* ── тап в любом месте → мини-взрыв сердечек ──────────────── */
+let lastTap = 0;
+addEventListener('pointerdown', e => {
+  const now = performance.now();
+  if(now - lastTap < 90) return;
+  lastTap = now;
+  FX.burst(e.clientX, e.clientY, {count:7,power:4.5,size:[12,24]});
+});
+
+/* ── двойной тап по фото → большое ❤️ (как в Telegram) ────── */
+document.querySelectorAll('.ph-frame').forEach(frame => {
+  frame.addEventListener('pointerup', e => {
+    const now = performance.now();
+    if(now - (frame._lt||0) < 320){
+      frame._lt = 0;
+      const h = document.createElement('div');
+      h.className='big-heart'; h.textContent='❤️';
+      frame.appendChild(h);
+      setTimeout(() => h.remove(), 1000);
+      const r = frame.getBoundingClientRect();
+      FX.burst(r.left+r.width/2, r.top+r.height/2, {count:16,power:6});
+      vibrate(20);
+    } else frame._lt = now;
+  });
+});
+
+/* ── кнопка-салют ─────────────────────────────────────────── */
+document.getElementById('cta').addEventListener('click', () => {
+  const r = document.getElementById('cta').getBoundingClientRect();
+  FX.burst(r.left+r.width/2, r.top, {count:32,power:9,size:[16,34],up:-4});
+  FX.rain(22);
+  vibrate(35);
+});
+</script>
+</body>
+</html>
