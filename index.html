@@ -7,25 +7,16 @@
 <title>Открытка ❤️ Для тебя</title>
 
 <!--
-  ❤️  ОТКРЫТКА-ПОЗДРАВЛЕНИЕ  ·  тёмная нежная тема · iOS 26
+  ❤️  ОТКРЫТКА ДЛЯ ДАШИ  ·  тёмная нежная тема · стиль iOS 26
 
-  ⚠️  ПОЧЕМУ РАНЬШЕ «НЕ НАЖИМАЛОСЬ»:
-  Обычно это происходит из-за кавычек/апострофов в тексте внутри <script>
-  (например: 'любимая "моя"' или "мама' папа") — ломается весь скрипт,
-  и конверт перестаёт открываться.
-  👉 Теперь ВСЕ тексты редактируются прямо в HTML (между тегами) —
-  кавычки и любые символы ничего не сломают.
-
-  ✏️  ГДЕ ЧТО МЕНЯТЬ (всё ниже, в теле файла):
-  • Заголовок          → текст внутри  <h1 id="title">…</h1>
-  • Подзаголовок       → внутри        <p id="subtitle">…</p>
-  • Фото               → замени путь в  <img src="photo1.jpg">
-                         (файл положи рядом с index.html)
-  • Подпись к фото     → текст внутри  <span class="txt">…</span>
-  • Поздравление       → каждый абзац <p class="msg">…</p> в «рамочке»
-  • Подпись в конце    → <p id="signature">…</p>
-  • Нужно больше фото/текстов — просто скопируй блоки
-    <figure class="scene">… и <div class="letter">… по образцу.
+  ✏️  ГДЕ ЧТО МЕНЯТЬ (всё прямо здесь, в тексте между тегами):
+  • Заголовок      → внутри  <h1 id="title">…</h1>
+  • Подзаголовок   → внутри  <p id="subtitle">…</p>
+  • Фото           → путь в  <img src="photo1.jpg"> (файл рядом с index.html)
+  • Подпись к фото → внутри  <span class="txt">…</span>
+  • Поздравление   → каждый <p class="msg">…</p> в «рамочке»
+  • Подпись внизу  → <p id="signature">…</p>
+  Кавычки и любые символы в тексте ничего не сломают.
 -->
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5/400.css">
@@ -127,7 +118,7 @@
   #stage{display:flex;flex-direction:column;gap:14px}
 
   /* ── сцена: фото + подпись рядом ────────────────────── */
-  .scene{display:flex;align-items:center;gap:38px;margin:58px 0;flex-direction:row}
+  .scene{display:flex;align-items:center;gap:38px;margin:64px 0;flex-direction:row}
   .scene:nth-of-type(even){flex-direction:row-reverse;padding-right:3%}
   .scene:nth-of-type(odd){padding-left:3%}
 
@@ -167,10 +158,10 @@
     100%{transform:scale(1.05) translateY(-16px);opacity:0}
   }
 
-  .cap-side{display:flex;flex-direction:column;gap:10px;max-width:250px}
+  .cap-side{display:flex;flex-direction:column;gap:10px;max-width:300px}
   .cap-side .num{font-family:'Unbounded';font-weight:700;font-size:11px;letter-spacing:4px;color:var(--rose)}
   .cap-side .line{width:46px;height:1px;background:linear-gradient(90deg,var(--rose),transparent);box-shadow:0 0 8px rgba(240,182,193,.6)}
-  .cap-side .txt{font-size:15.5px;line-height:1.6;color:#f6dde2;font-style:italic}
+  .cap-side .txt{font-size:14.5px;line-height:1.65;color:#f6dde2;font-style:italic}
   .scene:nth-of-type(even) .cap-side{align-items:flex-end;text-align:right}
   .scene:nth-of-type(even) .cap-side .line{background:linear-gradient(270deg,var(--rose),transparent)}
 
@@ -204,6 +195,7 @@
     padding:13px 17px 7px;border-radius:20px 20px 6px 20px;
     font-size:15px;line-height:1.55;border:1px solid rgba(255,255,255,.18);
     box-shadow:0 14px 30px rgba(0,0,0,.4), 0 0 30px rgba(201,123,139,.14);
+    white-space:pre-line; /* переносы строк в стихах сохраняются */
   }
   .msg.in{
     align-self:flex-start;border-radius:20px 20px 20px 6px;color:var(--ink);
@@ -247,7 +239,7 @@
     .scene,.scene:nth-of-type(even){flex-direction:column;gap:20px;padding:0 !important;margin:46px 0}
     .scene:nth-of-type(even) .cap-side{align-items:flex-start;text-align:left}
     .scene:nth-of-type(even) .cap-side .line{background:linear-gradient(90deg,var(--rose),transparent)}
-    .cap-side{max-width:400px}
+    .cap-side{max-width:420px}
     .letter,.letter:nth-of-type(even){align-self:stretch;rotate:0deg}
   }
   @media (prefers-reduced-motion:reduce){
@@ -274,9 +266,7 @@
 
   <main class="page">
     <header class="hero">
-      <!-- ✏️ ЗАГОЛОВОК — просто поменяй текст между тегами -->
       <h1 class="title rv" id="title" style="--d:.05s">С Днём Рождения!</h1>
-      <!-- ✏️ ПОДЗАГОЛОВОК -->
       <p class="subtitle rv" id="subtitle" style="--d:.2s">эта открытка — для тебя</p>
     </header>
 
@@ -284,26 +274,20 @@
 
     <section id="stage">
 
-      <!-- ══════════ ФОТО 1 ══════════
-           📸 замени путь:  src="photo1.jpg"  (файл рядом с index.html) -->
+      <!-- ══════════ ФОТО 1 📸 замени путь в src="photo1.jpg" ══════════ -->
       <figure class="scene rv">
         <div class="ph-frame">
           <div class="ph-inner"><img src="photo1.jpg" alt="фото 1"></div>
         </div>
         <figcaption class="cap-side">
           <span class="num">№ 01</span><span class="line"></span>
-          <!-- ✏️ ПОДПИСЬ к фото 1 -->
-          <span class="txt">Вставь подпись к первому фото…</span>
+          <span class="txt">В этот день 2 сентября 2009 года родилось маленькое чудо. Её назвали Дашей, но я называю её "Моя королева". Это чудо ещё не знает какой сложный и тернистый путь ей нужно будет пройти.</span>
         </figcaption>
       </figure>
 
-      <!-- ══════════ РАМОЧКА С ПОЗДРАВЛЕНИЕМ (после фото 1) ══════════
-           ✍️ каждый <p class="msg">…</p> — отдельный пузырь.
-           Добавляй сколько нужно, копируя строку <p>. -->
       <div class="letter rv" style="--d:.1s">
         <span class="letter-tag">моё поздравление</span>
-        <p class="msg in">В этот день 2 сентября 2009 года родилось маленькое чудо. Её назвали Дашей, но я называю её "Моя королева". Это чудо ещё не знает какой сложный и тернистый путь ей нужно будет пройти.</p>
-        <p class="msg">Вставь сюда продолжение поздравления…</p>
+        <p class="msg in">доброе утро кисенька моя! самых сладкив снов моя родная девочка</p>
       </div>
 
       <!-- ══════════ ФОТО 2 ══════════ -->
@@ -313,14 +297,23 @@
         </div>
         <figcaption class="cap-side">
           <span class="num">№ 02</span><span class="line"></span>
-          <!-- ✏️ ПОДПИСЬ к фото 2 -->
-          <span class="txt">Вставь подпись ко второму фото…</span>
+          <span class="txt">Примерно в это время, в твои 13 лет, ты встретила меня, свою беду и спасение. Примерно это лицо я помню как что-то совсем маленькое и не умелое. Когда ты только начинала свой путь в жизни. В этот период жизни ты столкнулась с первыми трудностями, с первой любовью. Такая Даша осталось в том времени, но я помню тебя и такой.</span>
         </figcaption>
       </figure>
 
       <div class="letter rv" style="--d:.1s">
         <span class="letter-tag">моё поздравление</span>
-        <p class="msg">И здесь — самые важные слова ❤️</p>
+        <p class="msg">цветет вишня в саду
+к ней подойду и полью
+цветет вишня в саду
+я к ней подойду, у нее полежу</p>
+        <p class="msg">цветет вишня в саду
+с неё листик упал, 
+я его подниму и к себе положу 
+цветёт вишня саду
+я ей насмотреться ни как не могу</p>
+        <p class="msg">мне с ней хорошо, я ею горжусь 
+за то что цветет моя вишня в саду</p>
       </div>
 
       <!-- ══════════ ФОТО 3 ══════════ -->
@@ -330,22 +323,22 @@
         </div>
         <figcaption class="cap-side">
           <span class="num">№ 03</span><span class="line"></span>
-          <!-- ✏️ ПОДПИСЬ к фото 3 -->
-          <span class="txt">Вставь подпись к третьему фото…</span>
+          <span class="txt">И вот сегодня тебе уже исполняется 17 лет, я наблюдаю за тобой как за истинной королевой и принцессой. Для меня ты не просто девушка, а мой ангел, на которого я смотрю с восхищением. Я надеюсь что все твои мечты и желания сбудутся и не перестанут сбываться моя принцесса. С днём рождения моя родная!!</span>
         </figcaption>
       </figure>
 
-      <!-- нужно ещё фото? скопируй любой блок <figure class="scene"> выше
-           и (по желанию) рамочку <div class="letter"> под него -->
+      <div class="letter rv" style="--d:.1s">
+        <span class="letter-tag">моё поздравление</span>
+        <p class="msg">Я поздравляю тебя моя самая любимая девочка, я желаю тебе оставаться такой же восхитительной, доброй, прекрасной и просто не подражаемой. Продолжай освещать мне путь, продолжай быть моим ангелом!</p>
+      </div>
 
     </section>
 
     <div class="divider rv">♥&ensp;•&ensp;♥&ensp;•&ensp;♥</div>
 
     <section class="finale">
-      <button class="cta rv" id="cta">Отправить любовь ❤️</button>
-      <!-- ✏️ ПОДПИСЬ В КОНЦЕ -->
-      <p class="signature rv" id="signature">С любовью, …</p>
+      <button class="cta rv" id="cta">Отправить пионы и розы 🌸</button>
+      <p class="signature rv" id="signature">С любовью твой рыцарь</p>
     </section>
   </main>
 
@@ -361,13 +354,15 @@ const FALLBACK_PHOTOS = [
 
 const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const rnd = (a,b) => a + Math.random()*(b-a);
+const FLOWERS = ['🌸','🌹','💮','🩷','✨']; /* пионы и розы для кнопки */
 
-/* ── движок сердечек (канвас) ─────────────────────────────── */
+/* ── движок: сердечки + нежно-розовые лепестки ────────────── */
 const FX = (() => {
   const cvs = document.getElementById('fx'), ctx = cvs.getContext('2d');
   let W, H;
   const parts = [];
   const EMO  = ['❤️','🤍','💖','💗','✨'];
+  const PETAL_COLORS = ['#fbd9e1','#f7c0ce','#f4a3b7','#f08ba4','#ffe3ea'];
   const pick = a => a[(Math.random()*a.length)|0];
 
   function resize(){
@@ -379,12 +374,24 @@ const FX = (() => {
   }
   addEventListener('resize', resize, {passive:true}); resize();
 
-  function draw(p, alpha){
+  function drawEmoji(p, alpha){
     ctx.save();
     ctx.globalAlpha = Math.max(0, Math.min(1, alpha));
     ctx.translate(p.x, p.y); ctx.rotate(p.rot||0);
     ctx.font = p.s+'px serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
     ctx.fillText(p.e, 0, 0); ctx.restore();
+  }
+  function drawPetal(p){
+    ctx.save();
+    ctx.globalAlpha = .9;
+    ctx.translate(p.x, p.y); ctx.rotate(p.rot);
+    ctx.fillStyle = p.c;
+    ctx.beginPath();
+    ctx.moveTo(0, -p.s);
+    ctx.quadraticCurveTo(p.s*.85, -p.s*.2, 0, p.s);
+    ctx.quadraticCurveTo(-p.s*.85, -p.s*.2, 0, -p.s);
+    ctx.fill();
+    ctx.restore();
   }
   function step(){
     ctx.clearRect(0,0,W,H);
@@ -394,18 +401,24 @@ const FX = (() => {
         p.vy += p.g; p.x += p.vx; p.y += p.vy; p.vx *= .985;
         p.rot += p.vr; p.life -= p.decay;
         if(p.life<=0){ parts.splice(i,1); continue; }
-        draw(p, p.life);
+        drawEmoji(p, p.life);
       } else if(p.type==='rain'){
         p.sway += p.swaySp; p.x += Math.sin(p.sway)*p.swayAmp; p.y += p.vy;
+        p.rot += (p.vr||0);
         if(p.y > H+50){ parts.splice(i,1); continue; }
-        draw(p, .95);
-      } else {
+        drawEmoji(p, .95);
+      } else if(p.type==='petal'){
+        p.sway += p.swaySp; p.x += Math.sin(p.sway)*p.swayAmp; p.y += p.vy;
+        p.rot += p.vr;
+        if(p.y > H+40){ parts.splice(i,1); continue; }
+        drawPetal(p);
+      } else { /* float — фоновые сердечки вверх */
         p.sway += p.swaySp; p.x += Math.sin(p.sway)*p.swayAmp; p.y += p.vy;
         if(p.y < -50){ parts.splice(i,1); continue; }
-        draw(p, p.a);
+        drawEmoji(p, p.a);
       }
     }
-    if(parts.length > 260) parts.splice(0, parts.length-260);
+    if(parts.length > 300) parts.splice(0, parts.length-300);
     requestAnimationFrame(step);
   }
   requestAnimationFrame(step);
@@ -430,19 +443,26 @@ const FX = (() => {
           e:pick(o.emojis||EMO),life:1,decay:rnd(.012,.022)});
       }
     },
-    rain(count=20){
+    rain(count=20, emojis=EMO){
       if(REDUCED) return;
       for(let i=0;i<count;i++)
         parts.push({type:'rain',x:rnd(0,W),y:rnd(-90,-10),vy:rnd(1.6,3.6),
           sway:rnd(0,6.28),swaySp:rnd(.02,.06),swayAmp:rnd(.4,1.4),
-          s:rnd(16,30),e:pick(EMO),rot:rnd(-.3,.3)});
+          s:rnd(16,30),e:pick(emojis),rot:rnd(-.3,.3)});
+    },
+    petals(count=28){ /* нежно-розовые лепестки пионов сверху */
+      if(REDUCED) return;
+      for(let i=0;i<count;i++)
+        parts.push({type:'petal',x:rnd(0,W),y:rnd(-140,-10),vy:rnd(.9,2.4),
+          sway:rnd(0,6.28),swaySp:rnd(.015,.05),swayAmp:rnd(.5,1.7),
+          s:rnd(6,13),rot:rnd(0,6.28),vr:rnd(-.05,.05),c:pick(PETAL_COLORS)});
     }
   };
 })();
 
 const vibrate = ms => { try{ navigator.vibrate && navigator.vibrate(ms); }catch(e){} };
 
-/* ── доработка HTML-контента (нумерация, метки, заглушки) ─── */
+/* ── доработка контента (нумерация, метки, заглушки) ──────── */
 const scenes = [...document.querySelectorAll('.scene')];
 scenes.forEach((scene, i) => {
   const num = scene.querySelector('.num');
@@ -452,7 +472,6 @@ scenes.forEach((scene, i) => {
   const img = scene.querySelector('img');
   if(img) img.onerror = () => { img.onerror = null; img.src = FALLBACK_PHOTOS[i % FALLBACK_PHOTOS.length]; };
 });
-/* «сейчас ✓✓» в каждый пузырь */
 document.querySelectorAll('.msg').forEach(m => {
   if(m.querySelector('.meta')) return;
   const meta = document.createElement('div');
@@ -523,11 +542,13 @@ document.querySelectorAll('.ph-frame').forEach(frame => {
   });
 });
 
-/* ── кнопка-салют ─────────────────────────────────────────── */
+/* ── кнопка → пионы и розы нежно-розового цвета ───────────── */
 document.getElementById('cta').addEventListener('click', () => {
   const r = document.getElementById('cta').getBoundingClientRect();
-  FX.burst(r.left+r.width/2, r.top, {count:32,power:9,size:[16,34],up:-4});
-  FX.rain(22);
+  const cx = r.left + r.width/2, cy = r.top;
+  FX.burst(cx, cy, {count:36, power:9, size:[18,38], up:-4, emojis:FLOWERS});
+  FX.rain(16, FLOWERS);
+  FX.petals(34);
   vibrate(35);
 });
 </script>
