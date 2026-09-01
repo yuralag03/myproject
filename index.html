@@ -7,27 +7,25 @@
 <title>Открытка ❤️ Для тебя</title>
 
 <!--
-  ❤️  ОТКРЫТКА-ПОЗДРАВЛЕНИЕ  ·  тёмная нежная тема · стиль iOS 26 / Liquid Glass
+  ❤️  ОТКРЫТКА-ПОЗДРАВЛЕНИЕ  ·  тёмная нежная тема · iOS 26
 
-  📸  ФОТО — КАК ДОБАВИТЬ СВОИ:
-      1. Положи файлы в ту же папку репозитория, где лежит этот index.html.
-      2. Назови их:   photo1.jpg    photo2.jpg    photo3.jpg
-         (хочешь другие имена или больше фото — просто допиши строки
-          в объекте CONFIG → «photos» в <script> внизу файла).
-      3. Пока твоих файлов нет — автоматически показываются заглушки.
-      Фото разбросаны по всему сайту, подпись — рядом с каждым фото
-      (поле «caption» у каждого фото в CONFIG).
+  ⚠️  ПОЧЕМУ РАНЬШЕ «НЕ НАЖИМАЛОСЬ»:
+  Обычно это происходит из-за кавычек/апострофов в тексте внутри <script>
+  (например: 'любимая "моя"' или "мама' папа") — ломается весь скрипт,
+  и конверт перестаёт открываться.
+  👉 Теперь ВСЕ тексты редактируются прямо в HTML (между тегами) —
+  кавычки и любые символы ничего не сломают.
 
-  ✍️  ТЕКСТ ПОЗДРАВЛЕНИЯ — КУДА ВСТАВЛЯТЬ:
-      Всё в одном месте — объект CONFIG внизу файла:
-        • title     — большой заголовок открытки
-        • subtitle  — строка под заголовком
-        • messages  — пузыри с поздравлением в рамочках (строк сколько
-                      угодно, они автоматически распределяются между фото)
-        • signature — твоя подпись в конце
-
-  🚀  GitHub: закинь index.html + фото в корень репозитория →
-      Settings → Pages → Branch: main → открытка онлайн.
+  ✏️  ГДЕ ЧТО МЕНЯТЬ (всё ниже, в теле файла):
+  • Заголовок          → текст внутри  <h1 id="title">…</h1>
+  • Подзаголовок       → внутри        <p id="subtitle">…</p>
+  • Фото               → замени путь в  <img src="photo1.jpg">
+                         (файл положи рядом с index.html)
+  • Подпись к фото     → текст внутри  <span class="txt">…</span>
+  • Поздравление       → каждый абзац <p class="msg">…</p> в «рамочке»
+  • Подпись в конце    → <p id="signature">…</p>
+  • Нужно больше фото/текстов — просто скопируй блоки
+    <figure class="scene">… и <div class="letter">… по образцу.
 -->
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5/400.css">
@@ -39,10 +37,10 @@
   :root{
     --bg-1:#241519;
     --bg-2:#181014;
-    --red:#c97b8b;      /* мягкое розовое дерево */
-    --red-deep:#8a4f5e; /* приглушённый пыльный бордо */
-    --rose:#f0b6c1;     /* пудрово-розовый */
-    --blush:#ffe9ec;    /* кремово-розовый */
+    --red:#c97b8b;
+    --red-deep:#8a4f5e;
+    --rose:#f0b6c1;
+    --blush:#ffe9ec;
     --ink:#fdf3f4;
     --muted:#cfa9b2;
     --glass:rgba(255,235,238,.06);
@@ -63,7 +61,6 @@
   }
   ::selection{background:#b06a7c;color:#fff}
 
-  /* ── мягкое свечение фона ───────────────────────────── */
   .glow{position:fixed;border-radius:50%;filter:blur(95px);z-index:0;pointer-events:none;animation:breathe 16s ease-in-out infinite alternate}
   .glow.g1{width:460px;height:460px;top:-140px;right:-110px;background:rgba(214,146,161,.28)}
   .glow.g2{width:520px;height:520px;bottom:-190px;left:-150px;background:rgba(150,84,104,.34);animation-delay:-5s}
@@ -76,7 +73,6 @@
 
   #fx{position:fixed;inset:0;z-index:60;pointer-events:none}
 
-  /* ── динамический остров ────────────────────────────── */
   .island{
     position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:20;
     display:flex;align-items:center;gap:8px;padding:9px 18px;border-radius:999px;
@@ -88,7 +84,6 @@
   .island i{width:7px;height:7px;border-radius:50%;background:var(--rose);box-shadow:0 0 10px var(--rose);animation:beat 1.4s ease-in-out infinite}
   @keyframes beat{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.55);opacity:.55}}
 
-  /* ── интро ──────────────────────────────────────────── */
   #intro{
     position:fixed;inset:0;z-index:40;display:grid;place-items:center;cursor:pointer;
     background:
@@ -115,7 +110,6 @@
   .intro-title{font-family:'Unbounded';font-weight:900;font-size:clamp(24px,7vw,36px);color:var(--blush);text-shadow:0 0 40px rgba(217,137,152,.5)}
   .intro-sub{font-size:14px;color:var(--muted);font-weight:600;letter-spacing:.5px}
 
-  /* ── страница ───────────────────────────────────────── */
   .page{position:relative;z-index:1;max-width:880px;margin:0 auto;padding:96px 22px 110px}
   .hero{text-align:center;margin-bottom:26px}
   .title{
@@ -132,11 +126,15 @@
 
   #stage{display:flex;flex-direction:column;gap:14px}
 
-  /* ── сцена: фото + подпись рядом, разбросаны по сайту ─ */
-  .scene{display:flex;align-items:center;gap:38px;margin:58px 0}
-  .scene.rev{flex-direction:row-reverse}
-  .scene:nth-of-type(even){padding-left:4%}
-  .scene:nth-of-type(odd).rev{padding-right:4%}
+  /* ── сцена: фото + подпись рядом ────────────────────── */
+  .scene{display:flex;align-items:center;gap:38px;margin:58px 0;flex-direction:row}
+  .scene:nth-of-type(even){flex-direction:row-reverse;padding-right:3%}
+  .scene:nth-of-type(odd){padding-left:3%}
+
+  .scene:nth-of-type(4n+1) .ph-frame{--rot:-3deg}
+  .scene:nth-of-type(4n+2) .ph-frame{--rot:2.5deg}
+  .scene:nth-of-type(4n+3) .ph-frame{--rot:-2deg}
+  .scene:nth-of-type(4n+4) .ph-frame{--rot:3.5deg}
 
   .ph-frame{
     position:relative;flex:0 0 auto;width:min(400px,88vw);aspect-ratio:4/5;
@@ -169,13 +167,12 @@
     100%{transform:scale(1.05) translateY(-16px);opacity:0}
   }
 
-  /* подпись рядом с фото */
   .cap-side{display:flex;flex-direction:column;gap:10px;max-width:250px}
   .cap-side .num{font-family:'Unbounded';font-weight:700;font-size:11px;letter-spacing:4px;color:var(--rose)}
   .cap-side .line{width:46px;height:1px;background:linear-gradient(90deg,var(--rose),transparent);box-shadow:0 0 8px rgba(240,182,193,.6)}
   .cap-side .txt{font-size:15.5px;line-height:1.6;color:#f6dde2;font-style:italic}
-  .scene.rev .cap-side{align-items:flex-end;text-align:right}
-  .scene.rev .cap-side .line{background:linear-gradient(270deg,var(--rose),transparent)}
+  .scene:nth-of-type(even) .cap-side{align-items:flex-end;text-align:right}
+  .scene:nth-of-type(even) .cap-side .line{background:linear-gradient(270deg,var(--rose),transparent)}
 
   /* ── рамочка с поздравлением ────────────────────────── */
   .letter{
@@ -187,7 +184,7 @@
     display:flex;flex-direction:column;gap:10px;
     rotate:-.8deg;
   }
-  .letter.right{align-self:flex-end;rotate:.8deg}
+  .letter:nth-of-type(even){align-self:flex-end;rotate:.8deg}
   .letter::before{
     content:'';position:absolute;inset:7px;border-radius:17px;pointer-events:none;
     border:1px dashed rgba(240,182,193,.38);
@@ -201,22 +198,21 @@
   }
 
   /* пузыри (как в Telegram) — внутри рамочки */
-  .bubble{
+  .msg{
     max-width:100%;align-self:flex-end;position:relative;
     background:linear-gradient(135deg,#d98a98,#a55d6e);color:#fff;
     padding:13px 17px 7px;border-radius:20px 20px 6px 20px;
     font-size:15px;line-height:1.55;border:1px solid rgba(255,255,255,.18);
     box-shadow:0 14px 30px rgba(0,0,0,.4), 0 0 30px rgba(201,123,139,.14);
   }
-  .bubble.in{
+  .msg.in{
     align-self:flex-start;border-radius:20px 20px 20px 6px;color:var(--ink);
     background:rgba(255,235,238,.08);border:1px solid var(--glass-brd);
     box-shadow:0 12px 26px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.10);
   }
-  .bubble .meta{display:flex;justify-content:flex-end;gap:6px;font-size:11px;opacity:.75;margin-top:6px;font-weight:600}
-  .bubble .ticks{letter-spacing:-1px}
+  .msg .meta{display:flex;justify-content:flex-end;gap:6px;font-size:11px;opacity:.75;margin-top:6px;font-weight:600}
+  .msg .ticks{letter-spacing:-1px}
 
-  /* ── финал: кнопка и подпись ────────────────────────── */
   .finale{display:flex;flex-direction:column;align-items:center;gap:22px;margin-top:70px}
   .cta{
     position:relative;overflow:hidden;border:none;cursor:pointer;
@@ -243,18 +239,16 @@
     border:1px solid var(--glass-brd);white-space:nowrap;
   }
 
-  /* ── пружинное появление при скролле ────────────────── */
   .rv{opacity:0;transform:translateY(40px) scale(.96)}
   .rv.show{animation:popIn .9s var(--spring) forwards;animation-delay:var(--d,0s)}
   @keyframes popIn{to{opacity:1;transform:none}}
 
-  /* ── мобильные: фото и подпись в столбик ────────────── */
   @media (max-width:700px){
-    .scene,.scene.rev{flex-direction:column;gap:20px;padding:0 !important;margin:46px 0}
-    .scene.rev .cap-side{align-items:flex-start;text-align:left}
-    .scene.rev .cap-side .line{background:linear-gradient(90deg,var(--rose),transparent)}
+    .scene,.scene:nth-of-type(even){flex-direction:column;gap:20px;padding:0 !important;margin:46px 0}
+    .scene:nth-of-type(even) .cap-side{align-items:flex-start;text-align:left}
+    .scene:nth-of-type(even) .cap-side .line{background:linear-gradient(90deg,var(--rose),transparent)}
     .cap-side{max-width:400px}
-    .letter,.letter.right{align-self:stretch;rotate:0deg}
+    .letter,.letter:nth-of-type(even){align-self:stretch;rotate:0deg}
   }
   @media (prefers-reduced-motion:reduce){
     *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
@@ -280,19 +274,77 @@
 
   <main class="page">
     <header class="hero">
+      <!-- ✏️ ЗАГОЛОВОК — просто поменяй текст между тегами -->
       <h1 class="title rv" id="title" style="--d:.05s">С Днём Рождения!</h1>
+      <!-- ✏️ ПОДЗАГОЛОВОК -->
       <p class="subtitle rv" id="subtitle" style="--d:.2s">эта открытка — для тебя</p>
     </header>
 
     <div class="divider rv" style="--d:.3s">♥&ensp;•&ensp;♥&ensp;•&ensp;♥</div>
 
-    <!-- 📸 фото + ✍️ поздравления в рамочках собираются сюда из CONFIG -->
-    <section id="stage"></section>
+    <section id="stage">
+
+      <!-- ══════════ ФОТО 1 ══════════
+           📸 замени путь:  src="photo1.jpg"  (файл рядом с index.html) -->
+      <figure class="scene rv">
+        <div class="ph-frame">
+          <div class="ph-inner"><img src="photo1.jpg" alt="фото 1"></div>
+        </div>
+        <figcaption class="cap-side">
+          <span class="num">№ 01</span><span class="line"></span>
+          <!-- ✏️ ПОДПИСЬ к фото 1 -->
+          <span class="txt">Вставь подпись к первому фото…</span>
+        </figcaption>
+      </figure>
+
+      <!-- ══════════ РАМОЧКА С ПОЗДРАВЛЕНИЕМ (после фото 1) ══════════
+           ✍️ каждый <p class="msg">…</p> — отдельный пузырь.
+           Добавляй сколько нужно, копируя строку <p>. -->
+      <div class="letter rv" style="--d:.1s">
+        <span class="letter-tag">моё поздравление</span>
+        <p class="msg in">Вставь сюда первое тёплое слово…</p>
+        <p class="msg">Вставь сюда продолжение поздравления…</p>
+      </div>
+
+      <!-- ══════════ ФОТО 2 ══════════ -->
+      <figure class="scene rv">
+        <div class="ph-frame">
+          <div class="ph-inner"><img src="photo2.jpg" alt="фото 2"></div>
+        </div>
+        <figcaption class="cap-side">
+          <span class="num">№ 02</span><span class="line"></span>
+          <!-- ✏️ ПОДПИСЬ к фото 2 -->
+          <span class="txt">Вставь подпись ко второму фото…</span>
+        </figcaption>
+      </figure>
+
+      <div class="letter rv" style="--d:.1s">
+        <span class="letter-tag">моё поздравление</span>
+        <p class="msg">И здесь — самые важные слова ❤️</p>
+      </div>
+
+      <!-- ══════════ ФОТО 3 ══════════ -->
+      <figure class="scene rv">
+        <div class="ph-frame">
+          <div class="ph-inner"><img src="photo3.jpg" alt="фото 3"></div>
+        </div>
+        <figcaption class="cap-side">
+          <span class="num">№ 03</span><span class="line"></span>
+          <!-- ✏️ ПОДПИСЬ к фото 3 -->
+          <span class="txt">Вставь подпись к третьему фото…</span>
+        </figcaption>
+      </figure>
+
+      <!-- нужно ещё фото? скопируй любой блок <figure class="scene"> выше
+           и (по желанию) рамочку <div class="letter"> под него -->
+
+    </section>
 
     <div class="divider rv">♥&ensp;•&ensp;♥&ensp;•&ensp;♥</div>
 
     <section class="finale">
       <button class="cta rv" id="cta">Отправить любовь ❤️</button>
+      <!-- ✏️ ПОДПИСЬ В КОНЦЕ -->
       <p class="signature rv" id="signature">С любовью, …</p>
     </section>
   </main>
@@ -300,33 +352,7 @@
   <div class="hint rv">тыкай куда угодно — полетят ❤️ · двойной тап по фото</div>
 
 <script>
-/* ═══════════════════════════════════════════════════════════
-   ✏️  CONFIG — ВСЁ РЕДАКТИРУЕТСЯ ЗДЕСЬ, В ОДНОМ МЕСТЕ
-   ═══════════════════════════════════════════════════════════ */
-const CONFIG = {
-  title:    'С Днём Рождения!',              // ← большой заголовок
-  subtitle: 'эта открытка — для тебя',       // ← строка под заголовком
-
-  /* 📸 ФОТО: положи файлы рядом с index.html (photo1.jpg …)
-     или впиши сюда свои имена. «caption» — подпись рядом с фото. */
-  photos: [
-    { src: 'photo1.jpg', caption: 'В этот день 2 сентября 2009 года родилось маленькое чудо. Её назвали Дашей, но я называю её "Моя королева". Это чудо ещё не знает какой сложный и тернистый путь ей нужно будет пройти.' },
-    { src: 'photo2.jpg', caption: 'Примерно в это время, в твои 13 лет, ты встретила меня, свою беду и спасение. Примерно это лицо я помню как что-то совсем маленькое и не умелое. Когда ты только начинала свой путь в жизни. В этот период жизни ты столкнулась с первыми трудностями, с первой любовью. Такая Даша осталось в том времени, но я помню тебя и такой.' },
-    { src: 'photo3.jpg', caption: 'И вот сегодня тебе уже исполняется 17 лет, я наблюдаю за тобой как за истенной королевой и принцессой. Для меня ты не просто девушка, а мой ангел, на которого я смотрю с восхищением. Я надеюсь что все твои мечты и желания сбудутся и не перестанут сбываться моя принцесса. С днём рождения моя родная!!' },
-  ],
-
-  /* ✍️ ПОЗДРАВЛЕНИЕ: каждая строка = один пузырь в рамочке.
-     Строки автоматически распределяются между фото по всему сайту. */
-  messages: [
-    'доброе утро кисенька моя! самых сладкив снов моя родная девочка'
-    'цветет вишня в саду к ней подойду и полью цветет вишня в саду я к ней подойду, у нее полежу цветет вишня в саду с неё листик упал, я его подниму и к себе положу цветёт вишня саду я ей насмотреться ни как не могу мне с ней хорошо, я ею горжусь за то что цветет моя вишня в саду',
-    'Сейчас я в тебе вижу настоящего ангела, который освещает мне путь!',
-  ],
-
-  signature: 'С любовью, (подпиши здесь)',   // ← твоя подпись
-};
-
-/* заглушки, пока твоих фото нет в репозитории */
+/* заглушки: показываются, пока твоих фото нет рядом с index.html */
 const FALLBACK_PHOTOS = [
   'https://image.qwenlm.ai/public_source/bdcd85d3-6515-4891-9635-ef89a9cd850e/17499651c-5571-4589-bf08-43ffb63b2fb9.png',
   'https://image.qwenlm.ai/public_source/bdcd85d3-6515-4891-9635-ef89a9cd850e/1044f3310-f4f9-437e-9d1a-20fcebd95483.png',
@@ -416,82 +442,24 @@ const FX = (() => {
 
 const vibrate = ms => { try{ navigator.vibrate && navigator.vibrate(ms); }catch(e){} };
 
-/* ── сборка страницы из CONFIG ────────────────────────────── */
-document.getElementById('title').textContent     = CONFIG.title;
-document.getElementById('subtitle').textContent  = CONFIG.subtitle;
-document.getElementById('signature').textContent = CONFIG.signature;
-
-const stage = document.getElementById('stage');
-const ROTS = [-4, 3, -2.5, 4, -3, 2.5];
-const DEPTHS = [1, 1.6, 1.2, 1.9, 1.4, 1.1];
-
-const nPhotos = Math.max(1, CONFIG.photos.length);
-const per = Math.max(1, Math.ceil(CONFIG.messages.length / nPhotos));
-const chunks = [];
-for(let i=0;i<CONFIG.messages.length;i+=per) chunks.push(CONFIG.messages.slice(i,i+per));
-
-let bubbleIdx = 0;
-function makeBubble(text){
-  const b = document.createElement('div');
-  b.className = 'bubble rv' + (bubbleIdx===0 ? ' in' : '');
-  b.style.setProperty('--d', .15+'s');
-  b.append(document.createTextNode(text));
-  const meta = document.createElement('div');
-  meta.className='meta';
-  meta.innerHTML='<span>сейчас</span><span class="ticks">✓✓</span>';
-  b.append(meta);
-  bubbleIdx++;
-  return b;
-}
-
-/* рамочка для блока поздравлений */
-function makeLetter(chunk, idx){
-  const letter = document.createElement('div');
-  letter.className = 'letter rv' + (idx%2 ? ' right' : '');
-  letter.style.setProperty('--d', '.1s');
-  const tag = document.createElement('span');
-  tag.className = 'letter-tag';
-  tag.textContent = 'моё поздравление';
-  letter.append(tag);
-  chunk.forEach(m => letter.append(makeBubble(m)));
-  return letter;
-}
-
-CONFIG.photos.forEach((p,i) => {
-  const scene = document.createElement('figure');
-  scene.className = 'scene rv' + (i%2 ? ' rev' : '');
-  scene.style.setProperty('--d', '0s');
-
-  const frame = document.createElement('div');
-  frame.className = 'ph-frame';
-  frame.style.setProperty('--rot', ROTS[i%ROTS.length]+'deg');
-  frame.dataset.depth = DEPTHS[i%DEPTHS.length];
-
-  const inner = document.createElement('div');
-  inner.className = 'ph-inner';
-  const img = document.createElement('img');
-  img.alt = p.caption || 'фото';
-  img.loading = 'lazy';
-  img.src = p.src;
-  img.onerror = () => { img.onerror=null; img.src=FALLBACK_PHOTOS[i%FALLBACK_PHOTOS.length]; };
-  inner.append(img);
-  frame.append(inner);
-
-  const cap = document.createElement('figcaption');
-  cap.className = 'cap-side';
-  cap.innerHTML = `<span class="num">№ 0${i+1}</span><span class="line"></span>`;
-  const txt = document.createElement('span');
-  txt.className='txt'; txt.textContent = p.caption;
-  cap.append(txt);
-
-  scene.append(frame, cap);
-  stage.append(scene);
-
-  if(chunks[i] && chunks[i].length) stage.append(makeLetter(chunks[i], i));
+/* ── доработка HTML-контента (нумерация, метки, заглушки) ─── */
+const scenes = [...document.querySelectorAll('.scene')];
+scenes.forEach((scene, i) => {
+  const num = scene.querySelector('.num');
+  if(num) num.textContent = '№ ' + String(i+1).padStart(2,'0');
+  const frame = scene.querySelector('.ph-frame');
+  if(frame) frame.dataset.depth = [1, 1.6, 1.2, 1.9, 1.4, 1.1][i % 6];
+  const img = scene.querySelector('img');
+  if(img) img.onerror = () => { img.onerror = null; img.src = FALLBACK_PHOTOS[i % FALLBACK_PHOTOS.length]; };
 });
-/* если сообщений больше, чем фото — добавим остаток в конец */
-for(let i=CONFIG.photos.length;i<chunks.length;i++)
-  if(chunks[i].length) stage.append(makeLetter(chunks[i], i));
+/* «сейчас ✓✓» в каждый пузырь */
+document.querySelectorAll('.msg').forEach(m => {
+  if(m.querySelector('.meta')) return;
+  const meta = document.createElement('div');
+  meta.className = 'meta';
+  meta.innerHTML = '<span>сейчас</span><span class="ticks">✓✓</span>';
+  m.append(meta);
+});
 
 /* ── интро ────────────────────────────────────────────────── */
 const intro = document.getElementById('intro');
@@ -538,9 +506,9 @@ addEventListener('pointerdown', e => {
   FX.burst(e.clientX, e.clientY, {count:7,power:4.5,size:[12,24]});
 });
 
-/* ── двойной тап по фото → большое ❤️ (как в Telegram) ────── */
+/* ── двойной тап по фото → большое ❤️ ─────────────────────── */
 document.querySelectorAll('.ph-frame').forEach(frame => {
-  frame.addEventListener('pointerup', e => {
+  frame.addEventListener('pointerup', () => {
     const now = performance.now();
     if(now - (frame._lt||0) < 320){
       frame._lt = 0;
